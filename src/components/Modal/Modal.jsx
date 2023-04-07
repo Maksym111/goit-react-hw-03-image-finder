@@ -2,32 +2,14 @@ import { Component } from 'react';
 import { ModalWindow, Overlay } from './Modal.styled';
 
 class Modal extends Component {
-  // componentDidUpdate(prevProp, prevState) {
-  //   if (
-  //     prevState.isShown !== this.state.isShown &&
-  //     prevState.isShown === false
-  //   ) {
-  //     document.querySelector('body').style.position = 'fixed';
-
-  //     // console.log('Add Listener');
-  //   } else if (
-  //     prevState.isShown !== this.state.isShown &&
-  //     prevState.isShown === true
-  //   ) {
-  //     document.querySelector('body').style = '';
-  //   }
-  // }
-
   componentDidMount = () => {
     window.addEventListener('keydown', this.onEscPress);
     window.addEventListener('click', this.onBackdropClick);
-    document.querySelector('body').style.position = 'fixed';
   };
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.onEscPress);
     window.removeEventListener('click', this.onBackdropClick);
-    document.querySelector('body').style = '';
   }
 
   onEscPress = e => {
