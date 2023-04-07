@@ -21,11 +21,13 @@ class Modal extends Component {
   componentDidMount = () => {
     window.addEventListener('keydown', this.onEscPress);
     window.addEventListener('click', this.onBackdropClick);
+    document.querySelector('body').style.position = 'fixed';
   };
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.onEscPress);
     window.removeEventListener('click', this.onBackdropClick);
+    document.querySelector('body').style = '';
   }
 
   onEscPress = e => {
