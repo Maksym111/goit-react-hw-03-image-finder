@@ -1,9 +1,13 @@
 import ImageGalleryItem from 'components/ImageGalleryItem';
 import { ListImages } from './ImageGallery.styled';
 
-const ImageGallery = ({ items }) => {
+const ImageGallery = ({ items, openModal }) => {
   return (
-    <ListImages>
+    <ListImages
+      onClick={e => {
+        openModal(e.target);
+      }}
+    >
       {items.map(item => {
         return <ImageGalleryItem key={item.id} item={item} />;
       })}
