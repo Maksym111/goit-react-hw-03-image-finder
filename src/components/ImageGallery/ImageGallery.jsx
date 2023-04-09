@@ -1,3 +1,4 @@
+import PropTypes, { func } from 'prop-types';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 import { ListImages } from './ImageGallery.styled';
 
@@ -13,6 +14,11 @@ const ImageGallery = ({ items, openModal }) => {
       })}
     </ListImages>
   );
+};
+
+ImageGallery.propTypes = {
+  items: PropTypes.array.isRequired,
+  openModal: func.isRequired,
 };
 
 export default ImageGallery;

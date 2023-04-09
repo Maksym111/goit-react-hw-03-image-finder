@@ -4,7 +4,7 @@ import { ThreeDots } from 'react-loader-spinner';
 import Searchbar from '../Searchbar/Searchbar';
 import getImages from 'services/fetch';
 import ImageGallery from '../ImageGallery/ImageGallery';
-import { Container } from './App.styled';
+import { Container, ErrorMessage } from './App.styled';
 import Button from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
 
@@ -13,6 +13,7 @@ export class App extends Component {
     search: '',
     page: 1,
     results: [],
+    totalResults: 0,
     loading: false,
     isShown: false,
     urlModal: null,
@@ -23,13 +24,18 @@ export class App extends Component {
     if (prevState.search !== search) {
       this.setState({
         results: [],
+        totalResults: 0,
         loading: true,
       });
 
       try {
         await getImages(search).then(data => {
+          const res = data.hits.map(({ id, webformatURL, largeImageURL }) => {
+            return { id, webformatURL, largeImageURL };
+          });
           this.setState({
-            results: data.hits,
+            results: res,
+            totalResults: data.totalHits,
             loading: false,
           });
         });
@@ -42,8 +48,12 @@ export class App extends Component {
 
       try {
         await getImages(search, page).then(data => {
+          const res = data.hits.map(({ id, webformatURL, largeImageURL }) => {
+            return { id, webformatURL, largeImageURL };
+          });
+
           this.setState({
-            results: [...prevState.results, ...data.hits],
+            results: [...prevState.results, ...res],
             loading: false,
             page,
           });
@@ -86,7 +96,8 @@ export class App extends Component {
   };
 
   render() {
-    const { search, loading, results, page, urlModal } = this.state;
+    const { search, loading, results, page, urlModal, totalResults } =
+      this.state;
 
     return (
       <Container>
@@ -105,15 +116,18 @@ export class App extends Component {
             visible={true}
           />
         )}
-        {search && (
+        {results.length > 0 && (
           <ImageGallery items={results} openModal={this.openModalImg} />
         )}
-        {/* urlItem={item} */}
         {this.state.isShown && (
           <Modal urlItem={urlModal} toggleModal={this.toggleModal} />
         )}
-        {results.length > 11 && !loading && (
+        {results.length > 0 && results.length < totalResults && !loading && (
           <Button value={search} loadMore={this.loadMore} numberPage={page} />
+        )}
+
+        {totalResults === 0 && search && !loading && (
+          <ErrorMessage>Ooops, something went wrong :(</ErrorMessage>
         )}
       </Container>
     );

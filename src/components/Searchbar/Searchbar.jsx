@@ -38,6 +38,7 @@ class Searchbar extends Component {
           <SearchInput
             type="text"
             autoComplete="off"
+            value={this.state.text}
             autoFocus
             placeholder="Search images and photos"
             onChange={this.handleInput}
